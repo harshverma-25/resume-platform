@@ -475,11 +475,28 @@ export default function BuildResumePage() {
             </button>
 
             <button
-              className="bg-green-600 text-white px-5 py-2 rounded"
-              onClick={() => router.push("/editor")}
-            >
-              Generate Resume
-            </button>
+  className="bg-green-600 text-white px-5 py-2 rounded"
+  onClick={() => {
+
+    const resumeData = {
+      basicInfo,
+      education,
+      skills,
+      experience,
+      projects,
+      achievements
+    }
+
+    localStorage.setItem(
+      "resumeData",
+      JSON.stringify(resumeData)
+    )
+
+    router.push("/editor")
+  }}
+>
+  Generate Resume
+</button>
 
           </div>
 
