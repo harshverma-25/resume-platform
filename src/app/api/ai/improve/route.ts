@@ -11,9 +11,14 @@ export async function POST(req: Request) {
     model: "gemini-1.5-flash"
   })
 
-  const result = await model.generateContent(
-    `Rewrite this resume description into professional bullet points:\n\n${text}`
-  )
+  const prompt = `
+Rewrite the following resume description into strong professional bullet points suitable for a software engineer resume.
+
+Text:
+${text}
+`
+
+  const result = await model.generateContent(prompt)
 
   const response = result.response.text()
 

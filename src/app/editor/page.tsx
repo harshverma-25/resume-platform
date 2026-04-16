@@ -77,6 +77,21 @@ export default function ResumeEditor() {
     )
   }
 
+  const improveText = async (text: string) => {
+
+  const res = await fetch("/api/ai/improve", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ text })
+  })
+
+  const data = await res.json()
+
+  return data.result
+}
+
   return (
     <div className="flex min-h-screen">
 

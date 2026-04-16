@@ -78,17 +78,40 @@ export default function MinimalTemplate({ resume }: Props) {
           Experience
         </h2>
 
-        {experience?.map((exp: any, i: number) => (
-          <div key={i} className="mt-2">
+      {experience?.map((exp: any, i: number) => (
 
-            <p className="font-medium">
-              {exp.company} — {exp.role}
-            </p>
+  <div key={i} className="mt-2">
 
-            <p>{exp.description}</p>
+    <p className="font-medium">
+      {exp.company} — {exp.role}
+    </p>
 
-          </div>
-        ))}
+    <p>{exp.description}</p>
+
+    <button
+      className="text-blue-600 text-xs mt-1"
+      onClick={async () => {
+
+        const res = await fetch("/api/ai/improve", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ text: exp.description })
+        })
+
+        const data = await res.json()
+
+        alert(data.result)
+
+      }}
+    >
+      ✨ Improve with AI
+    </button>
+
+  </div>
+
+))}
 
       </section>
 
