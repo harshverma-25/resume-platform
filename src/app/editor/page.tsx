@@ -11,22 +11,24 @@ export default function ResumeEditor() {
   const [resume, setResume] = useState<any>(null)
   const [template, setTemplate] = useState("minimal")
 
+  // Load resume
   useEffect(() => {
     const data = localStorage.getItem("resumeData")
-
     if (data) {
       setResume(JSON.parse(data))
     }
   }, [])
-  useEffect(() => {
-  if (resume) {
-    localStorage.setItem("resumeData", JSON.stringify(resume))
-  }
-}, [resume])
 
+  // Auto save
+  useEffect(() => {
+    if (resume) {
+      localStorage.setItem("resumeData", JSON.stringify(resume))
+    }
+  }, [resume])
+
+  // Download PDF
   const downloadPDF = async () => {
     const element = document.getElementById("resume-preview")
-
     if (!element) return
 
     const canvas = await html2canvas(element, {
@@ -45,28 +47,35 @@ export default function ResumeEditor() {
     pdf.save("resume.pdf")
   }
 
+  // Copy share link
+  const copyLink = async () => {
+    const url = window.location.href
+    await navigator.clipboard.writeText(url)
+    alert("Resume link copied!")
+  }
+
   if (!resume) {
-  return (
-    <div className="p-10 flex flex-col items-center gap-4">
+    return (
+      <div className="p-10 flex flex-col items-center gap-4">
 
-      <h1 className="text-xl font-semibold">
-        No Resume Data Found
-      </h1>
+        <h1 className="text-xl font-semibold">
+          No Resume Data Found
+        </h1>
 
-      <p className="text-gray-600">
-        Please build a resume first.
-      </p>
+        <p className="text-gray-600">
+          Please build a resume first.
+        </p>
 
-      <a
-        href="/build-resume"
-        className="bg-black text-white px-4 py-2 rounded"
-      >
-        Go to Resume Builder
-      </a>
+        <a
+          href="/build-resume"
+          className="bg-black text-white px-4 py-2 rounded"
+        >
+          Go to Resume Builder
+        </a>
 
-    </div>
-  )
-}
+      </div>
+    )
+  }
 
   return (
     <div className="flex min-h-screen">
@@ -137,7 +146,7 @@ export default function ResumeEditor() {
       {/* RIGHT PANEL */}
       <div className="w-1/2 p-10 bg-gray-100 overflow-y-scroll">
 
-        {/* TEMPLATE SELECTOR */}
+        {/* Template Selector */}
         <div className="mb-6 flex gap-3">
 
           <button
@@ -156,15 +165,26 @@ export default function ResumeEditor() {
 
         </div>
 
-        {/* DOWNLOAD BUTTON */}
-        <button
-          onClick={downloadPDF}
-          className="mb-6 bg-black text-white px-5 py-2 rounded"
-        >
-          Download PDF
-        </button>
+        {/* Actions */}
+        <div className="flex gap-3 mb-6">
 
-        {/* RESUME PREVIEW */}
+          <button
+            onClick={downloadPDF}
+            className="bg-black text-white px-5 py-2 rounded"
+          >
+            Download PDF
+          </button>
+
+          <button
+            onClick={copyLink}
+            className="bg-blue-600 text-white px-5 py-2 rounded"
+          >
+            Copy Resume Link
+          </button>
+
+        </div>
+
+        {/* Resume Preview */}
         <div id="resume-preview">
 
           {template === "minimal" && (
