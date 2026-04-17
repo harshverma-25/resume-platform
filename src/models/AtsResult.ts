@@ -10,7 +10,7 @@ export interface IAtsResult extends Document {
 
 const AtsResultSchema: Schema = new Schema({
   userId: { type: String, required: true, index: true },
-  score: { type: number, required: true },
+  score: { type: Number, required: true },
   suggestions: [{ type: String }],
   resumeTextSnippet: { type: String },
 }, { timestamps: true });
