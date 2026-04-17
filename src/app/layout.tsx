@@ -1,18 +1,29 @@
-import "./globals.css"
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
+import "./globals.css";
 
-export const metadata = {
+const inter = Inter({ subsets: ["latin"] });
+
+export const metadata: Metadata = {
   title: "AI Resume Platform",
-  description: "Build AI powered resumes and check ATS score",
-}
+  description: "Build ATS-friendly resumes with AI enhancement and community feedback.",
+};
 
 export default function RootLayout({
   children,
-}: {
-  children: React.ReactNode
-}) {
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
-  )
+    <ClerkProvider
+      appearance={{
+        baseTheme: undefined, // customize later if needed
+      }}
+    >
+      <html lang="en" className="dark">
+        <body className={inter.className}>{children}</body>
+      </html>
+    </ClerkProvider>
+  );
 }

@@ -1,26 +1,21 @@
-import { NextResponse } from "next/server"
-import { GoogleGenerativeAI } from "@google/generative-ai"
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
+import { NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
+import { improveText } from '@/lib/gemini';
 
 export async function POST(req: Request) {
+  const { userId } = await auth();
+  if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const { text } = await req.json()
+  const { text, type } = await req.json();
 
-  const model = genAI.getGenerativeModel({
-    model: "gemini-1.5-flash"
-  })
+  if (!text || !type) {
+    return NextResponse.json({ error: 'Text and type are required' }, { status: 400 });
+  }
 
-  const prompt = `
-Rewrite the following resume description into strong professional bullet points suitable for a software engineer resume.
-
-Text:
-${text}
-`
-
-  const result = await model.generateContent(prompt)
-
-  const response = result.response.text()
-
-  return NextResponse.json({ result: response })
+  try {
+    const improved = await improveText(text, type as 'experience' | 'project' | 'achievement');
+    return NextResponse.json({ result: improved });
+  } catch (error) {
+    return NextResponse.json({ error: 'Failed to improve text' }, { status: 500 });
+  }
 }

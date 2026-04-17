@@ -1,35 +1,18 @@
-"use client"
-
-import Link from "next/link"
+import { Sidebar } from "@/components/Sidebar";
 
 export default function DashboardLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <div className="flex h-screen">
-
-      {/* Sidebar */}
-      <aside className="w-20 bg-black text-white flex flex-col items-center py-6 space-y-6">
-
-        <Link href="/dashboard">🏠</Link>
-
-        <Link href="/build-resume">📄</Link>
-
-        <Link href="/my-resumes">📁</Link>
-
-        <Link href="/community">🌎</Link>
-
-        <Link href="/ats-checker">🤖</Link>
-
-      </aside>
-
-      {/* Content */}
-      <main className="flex-1 p-10 bg-gray-50">
-        {children}
+    <div className="flex min-h-screen bg-black">
+      <Sidebar />
+      <main className="flex-1 ml-64 p-8">
+        <div className="max-w-6xl mx-auto">
+          {children}
+        </div>
       </main>
-
     </div>
-  )
+  );
 }
